@@ -1,0 +1,144 @@
+              A.I. Freecell Solver basic usage instructions
+                             Kevin Atkinson
+                       kevin.fs@atkinson.dhs.org
+                              Dec 11, 2001
+
+* Setup
+
+Because the search is computationally intense using clisp is not
+recommend unless you enjoy waiting for ever.  Of the two compiled Lisp
+implementations tried, Allegro and CMUCL, CMUCL gives the best
+performance and is the preferred lisp implementation to run the
+searched with and is the one used for testing.  The lisp script
+compile-cmucl.lisp will compile the code for CMUCL.  This will compile
+everything into the file "all.x86f".  Once compiled simple load it
+with (load "all").  Allegro will also work however it is several times
+slower than CMUCL.  The script compile-allegro.lisp will handle the
+compilation.  However, the current code as is may not work due to some
+CMUCL specific features used in the "microsoft" and "fc-solve"
+functions found at the end of game.lsp.  Commenting these functions
+out *should* allow it to compile and run with Allegro.
+
+
+* Basic Usage
+
+To create a new game use deal.  For example 
+
+  (setf game (deal))
+
+By default the game will print out in a terse format such as:
+
+  Game:52,0
+
+To print the current state of the game either use print-game-expanded
+or set the variable *game-format* to :verbose.  To change it back set
+the variable to :terse.
+
+To make a move use the command 
+
+  (make-single-move <game> <from> <to>)
+
+Where <game> is the current game and <from> and <to> are positions.
+To create a position use:
+
+  (pos column|freecell|homecell [num])
+
+For example column 0 would be (pos :column 0) and a homecell would be
+(pos homecell).
+
+The functions (push-card <game> <pos>) and (pop-card <game> <pos>) can
+be used to directly manipulate the game.  Absolutely no error
+checkering is done so you are free to do what ever you want with the
+game like having 5 aces.
+
+The function (read-deal) can be used to read in a deal in standard
+format such as those produce by freecell solver.  The function
+(print-deal <game>) will print the deal of a game but only if 
+no moves have been made.  These two functions also accept the
+name of a stream as a optional parameter.  
+
+The variable *card-format* controls the format in which cards are
+printed out.  The possible values are :numeric (the default) :compact
+and :standard.  :Numeric prints cards out the ranks and suits as
+numbers.  The suits map to the numbers as follows Diamonds=0, Clubs=1,
+Hearts=2, and Spades=3. For example, "10-3" Would be the 10 of spades.
+:Standard prints cards out in an abbreviated fashion.  For example the
+above card would be "10S" and the King of Hearts would be "KH".
+:Compact is like :standard except that the 10 is printed as "0" so
+that all cards have the same width.
+
+The variable *move-format* control how moves and positions are printed
+out.  :Normal (the default) prints them out in a semi-compact but easy
+to understand format while :compact prints them in a compact "Standard
+Freecell Notion" invented by Andrey Tsouladze:
+
+  Free cells (upper row, left side) are named (left to right) a, b, c, d.
+  Home (upper row, right) is h.
+  Initial columns (lower row, left to right) are named 1 through 8.
+
+  Example Moves:
+  1. Column one to column three: 13
+  2. Second freecell (b) to column five: b5
+  3. Column 4 to first (leftmost) freecell: 4a
+  4. Third freecell to home: ch
+  etc.
+
+  Read moves line by line, 10 per line.
+
+EXCEPT that columns start at 0.  To make columns start at 1 set the
+*column-start* variable to 1.
+
+To perform a search use (df-search <game> <parms>).  See the file
+search.lsp for an explanation of the various parameter this function
+can take.  Please note that the search is rather resource heavy and
+can easily take up 128 Megs or more.  I do not recommend running the
+search on machines with less than 256 Megs of ram.
+
+By default some basic move tracking is done to avoid pointless moves
+such as moving a card to one column (say col 0) and then several moves
+latter moving the card to another column (col 3) without ever using
+the open freecell spot or putting anything on top of column 0.  You
+can turn this or a particular game by
+  (setf (indp-mode <game>) :ignore)
+the default for new games is stored in *game-indp-mode* which defaults
+to :disallow.
+
+
+* Using Freecell Solver from within CMUCL
+
+The functions fc-solve and Microsoft allow the access to the freecell
+solver and Microsoft game generator found in Freecell Solver available
+at http://vipe.technion.ac.il/~shlomif/freecell-solver/.  In order to
+use these functions on your system the paths found in the functions
+will need to be adjusted to your system.
+
+The usage for fc-solve is (fc-solve game search) Where game is a game
+just like it would be for df-search and search is one of ":df-opt"
+":df" or ":a-star".  If search is not specified than it defaults to
+":df-opt". The output is the list of moves in standard notation the
+count of the number of moves and then any remaining output fc-solve
+gives.
+
+The usage for microsoft is (microsoft game-num) Where game-num in the
+Microsoft game number.  The function will return a new freecell game
+just in the same manner that (deal) and (read-deal) do.
+
+
+* Copyright
+
+Copyright (C) 2001 Kevin Atkinson <kevin.fc at atkinson dhs org>
+
+This lisp code is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License, version 2, as
+published by the Free Software Foundation.
+
+It is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+USA, or visit www.gnu.org.
+

@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>A.I. Freecell Solver</title>
+</head>
+<body>
+<h1 align=center>A.I. Freecell Solver</h1> 
+<hr>
+<p>
+For CMSC671 (Graduate level A.I) we were required to "design,
+implement, demonstrate, evaluate, and report on a working AI system in
+Lisp that combines significant components of the course."  Our group
+decided to implement a freecell solver.  I ended up writing almost all
+the code and my partner ended up writing most of the report.  Because
+our solver is rather unique I decided to release the code under the <a
+href="gpl.txt">GPL</a>.  In general, our solutions are shorter than
+those found by a comparable Free Cell solver found at <a
+href="http://vipe.technion.ac.il/~shlomif/freecell-solver">http://vipe.technion.ac.il/~shlomif/freecell-solver</a>,
+although the a-star search found in that package seems to do better
+with some of the most difficult games.  It should work with any ANSI
+Common List implementation; however because the search is
+computationally intense using clisp or some other interpretative lisp
+implantation is not recommend unless you enjoy waiting for ever.  Of
+the two compiled Lisp implementations tried, Allegro and CMUCL, CMUCL
+gives the best performance.  The final code has only been tested with
+CMUCL.
+<p>
+<ul>
+<li>Final Report (pdf): <a href="report/paper.pdf">Part 1</a>, <a
+href="report/data.pdf">Part 2</a>
+<li><a href="code/">Browse Code Online</a>
+<li>Download: <a href="ai-freecell.tar.gz">tar.gz</a>, <a
+href="ai-freecell.zip">zip</a>.
+<li><a href="http://home.earthlink.net/~fomalhaut/fcfaq.html">Freecell
+FAQ</a> (offsite)
+</ul>
+<hr>
+This page is maintained by Kevin Atkinson (kevin.fc at atkinson dhs
+org), to my <a href="http://kevin.atkinson.dhs.org">Home Page</a>
+</body>
+</html>
